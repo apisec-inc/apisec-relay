@@ -1,0 +1,17 @@
+{
+  "applicationId": "<string>",
+  "applicationName": "<string>",
+  "applicationType": "OPEN_API",
+  "entitlement": {
+    "userId": "<string>",
+    "role": "Owner",
+    "permission": "Edit"
+  },
+  "instances": [
+    {
+      "instanceId": "<string>",
+      "hostUrl": "http://crapi2.example.com",
+      "latestScanStats": null
+    }
+  ]
+}

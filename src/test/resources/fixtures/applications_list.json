@@ -1,0 +1,89 @@
+{
+  "applications": [
+    {
+      "applicationId": "<string>",
+      "applicationName": "<string>",
+      "applicationType": "OPEN_API",
+      "entitlement": {
+        "userId": "<string>",
+        "role": "Owner",
+        "permission": "Edit"
+      },
+      "instances": [
+        {
+          "instanceId": "<string>",
+          "hostUrl": "http://netbank.example.com:8080/",
+          "latestScanStats": {
+            "scanDate": "2025-01-07T14:23:19.829663266",
+            "percentEndpointsVulnerable": 100,
+            "vulnerabilityStats": {
+              "total": 0,
+              "criticalSeverity": 0,
+              "highSeverity": 112,
+              "mediumSeverity": 5,
+              "lowSeverity": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "applicationId": "<string>",
+      "applicationName": "<string>",
+      "applicationType": "OPEN_API",
+      "entitlement": {
+        "userId": "<string>",
+        "role": "Owner",
+        "permission": "Edit"
+      },
+      "instances": [
+        {
+          "instanceId": "<string>",
+          "hostUrl": "http://http://netbank.example.com:8080/",
+          "latestScanStats": {
+            "scanDate": null,
+            "percentEndpointsVulnerable": 0,
+            "vulnerabilityStats": {
+              "total": 0,
+              "criticalSeverity": 0,
+              "highSeverity": 0,
+              "mediumSeverity": 0,
+              "lowSeverity": 0
+            }
+          }
+        },
+        {
+          "instanceId": "<string>",
+          "hostUrl": "http://http://netbank.example.com:8080/",
+          "latestScanStats": {
+            "scanDate": null,
+            "percentEndpointsVulnerable": 0,
+            "vulnerabilityStats": {
+              "total": 0,
+              "criticalSeverity": 0,
+              "highSeverity": 0,
+              "mediumSeverity": 0,
+              "lowSeverity": 0
+            }
+          }
+        },
+        {
+          "instanceId": "<string>",
+          "hostUrl": "http://http://netbank.example.com:8080/",
+          "latestScanStats": {
+            "scanDate": null,
+            "percentEndpointsVulnerable": 0,
+            "vulnerabilityStats": {
+              "total": 0,
+              "criticalSeverity": 0,
+              "highSeverity": 0,
+              "mediumSeverity": 0,
+              "lowSeverity": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "nextToken": null
+}

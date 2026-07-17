@@ -1,0 +1,2221 @@
+{
+  "metadata": {
+    "totalHighSeverityVulnerabilities": 2,
+    "totalActiveVulnerabilities": 6,
+    "totalVulnerabilitiesResolved": 0,
+    "totalTests": 5544,
+    "totalHoursSaved": 1848
+  },
+  "detections": [
+    {
+      "category": {
+        "id": "recon",
+        "name": "Reconnaissance",
+        "description": "Reconnaissance is the first step in a pen test, it gathers information to better attack the target."
+      },
+      "test": {
+        "id": "dryRun",
+        "name": "Dry Run",
+        "description": "First contact with an endpoint, with best guess parameters, returns response and ssl cert",
+        "owaspTag": null,
+        "denormalizedTests": [
+          {
+            "name": "Dry Run",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "ssl",
+        "name": "SSL Certificates",
+        "description": "Test the SSL certificates of a server for vulnerabilities."
+      },
+      "test": {
+        "id": "valid",
+        "name": "SSL Valid test",
+        "description": "SSL was found to be valid",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Certificate Strength",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "headers",
+        "name": "Response Headers",
+        "description": "Test the response headers of a server for vulnerabilities."
+      },
+      "test": {
+        "id": "cors",
+        "name": "Cross Origin Resource Sharing",
+        "description": "ensuring CORS headers are set correctly, don't simply reflect the origin",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "CORS",
+            "enabled": true
+          },
+          {
+            "name": "CORS Injection",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 126,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "headers",
+        "name": "Response Headers",
+        "description": "Test the response headers of a server for vulnerabilities."
+      },
+      "test": {
+        "id": "hsts",
+        "name": "HTTPS Strict Transport Security",
+        "description": "Looking for HSTS headers in the response",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "HSTS",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 126,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "headers",
+        "name": "Response Headers",
+        "description": "Test the response headers of a server for vulnerabilities."
+      },
+      "test": {
+        "id": "rateLimit",
+        "name": "Rate Limit",
+        "description": "Looking for rate limit headers in the response",
+        "owaspTag": [
+          "API8:2023",
+          "API4:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Rate Limit",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "headers",
+        "name": "Response Headers",
+        "description": "Test the response headers of a server for vulnerabilities."
+      },
+      "test": {
+        "id": "mime",
+        "name": "Content Type Header",
+        "description": "Validating the Content-Type header",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "MIME",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "windows_command_shell",
+        "name": "Windows Shell Command Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Windows Command Shell",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "windows_powershell",
+        "name": "Windows PowerShell Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Windows PowerShell",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "nosql",
+        "name": "NoSQL Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "NoSQL",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "sql",
+        "name": "SQL Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "SQL",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "oracle",
+        "name": "Oracle Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Oracle",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "postgres",
+        "name": "PostgreSQL Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "PostgreSQL",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "mssql",
+        "name": "Microsoft SQL Server Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Microsoft SQL Server",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "linux",
+        "name": "Linux Command Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Linux",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "mongodb",
+        "name": "MongoDB Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "MongoDB",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "sql_version",
+        "name": "SQL Version Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "SQL version",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "mongodb_version",
+        "name": "MongoDB Version Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "MongoDB version",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "sqlite_version",
+        "name": "SQLite Version Injection",
+        "description": "Tech specific injections to test for varying response times and tech specific errors",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "SQLite version",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 336,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "reflectHeader",
+        "name": "Data Reflected in Headers",
+        "description": "Request Body data was reflected in response headers",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Reflect Header",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "reflectBody",
+        "name": "Data Reflected in Body from Params",
+        "description": "Request Body data was reflected in response body",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Reflect Body",
+            "enabled": true
+          },
+          {
+            "name": "Malicious script injection",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "injection",
+        "name": "Payload Injection",
+        "description": "Attempt various injections to get errors or responses to give a clue to what was processed."
+      },
+      "test": {
+        "id": "image",
+        "name": "Upload an image with malicious exif data",
+        "description": "Request Body data was reflected in response body",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Image with malicious exif data",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "infoLeak",
+        "name": "Information Leak",
+        "description": "Data exposed that is more helpful to an attacker than a customer."
+      },
+      "test": {
+        "id": "network",
+        "name": "Network Information Leak",
+        "description": "Network data found in the response headers",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Network Configuration leak",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "infoLeak",
+        "name": "Information Leak",
+        "description": "Data exposed that is more helpful to an attacker than a customer."
+      },
+      "test": {
+        "id": "server",
+        "name": "Server Information Leak",
+        "description": "Data leak about the technology used to implement the server",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Server Implementation leak",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 84,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "infoLeak",
+        "name": "Information Leak",
+        "description": "Data exposed that is more helpful to an attacker than a customer."
+      },
+      "test": {
+        "id": "error",
+        "name": "Information Leak Error",
+        "description": "Errors returned have debug information",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Stack Trace Error",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 84,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "infoLeak",
+        "name": "Information Leak",
+        "description": "Data exposed that is more helpful to an attacker than a customer."
+      },
+      "test": {
+        "id": "excessive",
+        "name": "Excessive Data Exposure",
+        "description": "Data found that may exceed API requirements and is expected to be filtered by a UI",
+        "owaspTag": [
+          "API3:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Excessive Data Exposure",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "infoLeak",
+        "name": "Information Leak",
+        "description": "Data exposed that is more helpful to an attacker than a customer."
+      },
+      "test": {
+        "id": "token",
+        "name": "Access token data leak",
+        "description": "Access token contains sensitive data",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "PII Leak in Access Token",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "infoLeak",
+        "name": "Information Leak",
+        "description": "Data exposed that is more helpful to an attacker than a customer."
+      },
+      "test": {
+        "id": "pii",
+        "name": "PII data in response",
+        "description": "Personal Identifiable Information found in the response",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "PII Data Exposure",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 2,
+        "numActiveVulnerabilities": 2,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": [
+          {
+            "detectionId": "019b938e-1ba0-744c-a1e1-dd7396cd6c27",
+            "endpointId": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMvYWxs",
+            "method": "get",
+            "resource": "/workshop/api/shop/orders/all",
+            "testResult": {
+              "cvssScore": 6,
+              "cvssQualifier": "Medium",
+              "detectionDescription": null,
+              "assertion": null,
+              "remediation": null,
+              "owaspTags": [
+                "API8:2023"
+              ],
+              "cwes": null
+            },
+            "detectionDate": "2026-01-06T13:45:22.592586173",
+            "lastFoundDate": "2026-01-06T13:45:22.592587163",
+            "resolutionDate": null,
+            "status": "ACTIVE",
+            "riskAcceptedEndDate": null,
+            "riskAcceptedBy": null,
+            "comments": null
+          },
+          {
+            "detectionId": "019b938e-1ba0-7a18-8743-ea1772af6f9c",
+            "endpointId": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMve29yZGVyX2lkfQ==",
+            "method": "get",
+            "resource": "/workshop/api/shop/orders/{order_id}",
+            "testResult": {
+              "cvssScore": 6,
+              "cvssQualifier": "Medium",
+              "detectionDescription": null,
+              "assertion": null,
+              "remediation": null,
+              "owaspTags": [
+                "API8:2023"
+              ],
+              "cwes": null
+            },
+            "detectionDate": "2026-01-06T13:45:22.592627413",
+            "lastFoundDate": "2026-01-06T13:45:22.592627660",
+            "resolutionDate": null,
+            "status": "ACTIVE",
+            "riskAcceptedEndDate": null,
+            "riskAcceptedBy": null,
+            "comments": null
+          }
+        ]
+      }
+    },
+    {
+      "category": {
+        "id": "idor",
+        "name": "Indirect Object Reference",
+        "description": "Testing for conditions that allow an attacker to access unauthorized data."
+      },
+      "test": {
+        "id": "incremental",
+        "name": "Incremental IDs",
+        "description": "Incremental IDs can be guessed and scraped easier than unique IDs",
+        "owaspTag": [
+          "API1:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Icremental Identifier",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 2,
+        "numActiveVulnerabilities": 2,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": [
+          {
+            "detectionId": "019b938e-1ba0-7ecb-b163-c6ef7fdaab90",
+            "endpointId": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMvYWxs",
+            "method": "get",
+            "resource": "/workshop/api/shop/orders/all",
+            "testResult": {
+              "cvssScore": 5,
+              "cvssQualifier": "Medium",
+              "detectionDescription": null,
+              "assertion": null,
+              "remediation": null,
+              "owaspTags": [
+                "API1:2023"
+              ],
+              "cwes": null
+            },
+            "detectionDate": "2026-01-06T13:45:22.592604609",
+            "lastFoundDate": "2026-01-06T13:45:22.592604846",
+            "resolutionDate": null,
+            "status": "ACTIVE",
+            "riskAcceptedEndDate": null,
+            "riskAcceptedBy": null,
+            "comments": null
+          },
+          {
+            "detectionId": "019b938e-1ba0-7d4d-bd6a-5d0cdde66013",
+            "endpointId": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMve29yZGVyX2lkfQ==",
+            "method": "get",
+            "resource": "/workshop/api/shop/orders/{order_id}",
+            "testResult": {
+              "cvssScore": 5,
+              "cvssQualifier": "Medium",
+              "detectionDescription": null,
+              "assertion": null,
+              "remediation": null,
+              "owaspTags": [
+                "API1:2023"
+              ],
+              "cwes": null
+            },
+            "detectionDate": "2026-01-06T13:45:22.592635916",
+            "lastFoundDate": "2026-01-06T13:45:22.592636144",
+            "resolutionDate": null,
+            "status": "ACTIVE",
+            "riskAcceptedEndDate": null,
+            "riskAcceptedBy": null,
+            "comments": null
+          }
+        ]
+      }
+    },
+    {
+      "category": {
+        "id": "idor",
+        "name": "Indirect Object Reference",
+        "description": "Testing for conditions that allow an attacker to access unauthorized data."
+      },
+      "test": {
+        "id": "enumeration",
+        "name": "Object Enumeration",
+        "description": "Incremental IDs can be guessed and scraped easier than unique IDs",
+        "owaspTag": [
+          "API1:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Object reveal (via lack of auth first enforcement and 404 response)",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "cookies",
+        "name": "Cookie Analysis",
+        "description": "Test for secure cookie settings where cookies are found"
+      },
+      "test": {
+        "id": "secure",
+        "name": "Insecure Cookies",
+        "description": "Security settings that should always exist when cookies are set",
+        "owaspTag": [
+          "API8:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Secure Configuration",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 84,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "ssrf",
+        "name": "SSRF",
+        "description": "Server Side Request Forgery. Try to get a server to reach an outside resource"
+      },
+      "test": {
+        "id": "url",
+        "name": "SSRF URL",
+        "description": "Uses a separate service to detect if a backend server reached it",
+        "owaspTag": [
+          "API7:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Server-Side Request Forgery via URL",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "ssrf",
+        "name": "SSRF",
+        "description": "Server Side Request Forgery. Try to get a server to reach an outside resource"
+      },
+      "test": {
+        "id": "dns",
+        "name": "SSRF DNS",
+        "description": "Uses a separate service to detect if a backend server reached it",
+        "owaspTag": [
+          "API7:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Server-Side Request Forgery via DNS",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "discovery",
+        "name": "Discovery",
+        "description": "Attempt to discover API endpoints."
+      },
+      "test": {
+        "id": "exposedPaths",
+        "name": "Accessible Paths",
+        "description": "Discover Paths available on the base url",
+        "owaspTag": [
+          "API9:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Undocumented URL Paths",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "discovery",
+        "name": "Discovery",
+        "description": "Attempt to discover API endpoints."
+      },
+      "test": {
+        "id": "legacyVersions",
+        "name": "Accessible Versioned Paths",
+        "description": "Discover other versions from paths with explicit version",
+        "owaspTag": [
+          "API9:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Undocumented Legacy Versions",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "discovery",
+        "name": "Discovery",
+        "description": "Attempt to discover API endpoints."
+      },
+      "test": {
+        "id": "undocumented_methods",
+        "name": "Undocumented HTTP methods",
+        "description": "Undocumented HTTP methods that are accessible to users.",
+        "owaspTag": [
+          "API9:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Undocumented HTTP Methods",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "discovery",
+        "name": "Discovery",
+        "description": "Attempt to discover API endpoints."
+      },
+      "test": {
+        "id": "oidc_discovery",
+        "name": "OIDC Discovery Endpoint",
+        "description": "OIDC discovery endpoint.",
+        "owaspTag": [],
+        "denormalizedTests": [
+          {
+            "name": "OIDC Discovery Endpoint",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "discovery",
+        "name": "Discovery",
+        "description": "Attempt to discover API endpoints."
+      },
+      "test": {
+        "id": "jwks",
+        "name": "JWKS Endpoint",
+        "description": "JWKS endpoint.",
+        "owaspTag": [],
+        "denormalizedTests": [
+          {
+            "name": "JWKS Endpoint",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "unenforced_credentials",
+        "name": "Unenforced credentials",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Secure Handling of Unauthenticated requests",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 1,
+        "numActiveVulnerabilities": 1,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": [
+          {
+            "detectionId": "019b938e-1ba0-7d72-9b97-37eeeb045f2c",
+            "endpointId": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMve29yZGVyX2lkfQ==",
+            "method": "get",
+            "resource": "/workshop/api/shop/orders/{order_id}",
+            "testResult": {
+              "cvssScore": 10,
+              "cvssQualifier": "Critical",
+              "detectionDescription": null,
+              "assertion": null,
+              "remediation": null,
+              "owaspTags": [
+                "API2:2023"
+              ],
+              "cwes": null
+            },
+            "detectionDate": "2026-01-06T13:45:22.592647411",
+            "lastFoundDate": "2026-01-06T13:45:22.592647677",
+            "resolutionDate": null,
+            "status": "ACTIVE",
+            "riskAcceptedEndDate": null,
+            "riskAcceptedBy": null,
+            "comments": null
+          }
+        ]
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "sql_injection_login",
+        "name": "SQL Injection in Login",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "SQL Injection In Login",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "pin_ota",
+        "name": "PIN/OTA brute force",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "PIN/OTA code brute force",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "brute_force",
+        "name": "Brute Force Login",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Login Brute Force",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "password_strength",
+        "name": "Password strength",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Password Strength",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "oauth_auth_code_reuse",
+        "name": "Authorization code reuse (OAuth)",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "OAuth access token exchange code reuse",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "auth",
+        "name": "Authentication",
+        "description": "Look for authentication issues."
+      },
+      "test": {
+        "id": "hmac_signature_strength",
+        "name": "HMAC signature strength",
+        "description": "check that authorized endpoints enforce access tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "HMAC Signature Strength Test",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "unsigned_token",
+        "name": "Unsigned token",
+        "description": "Check if the API rejects unsigned tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Unsigned Token",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_header",
+        "name": "Token with tampered header",
+        "description": "Check that the API rejects tampered tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Token with tampered header",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_signature",
+        "name": "Token tampered with signature",
+        "description": "Check that the API rejects tampered tokens with bad signatures",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Token tampered with random signature",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "token_tampered_timestamp",
+        "name": "Token with tampered timestamp",
+        "description": "Check that the API rejects tokens with tampered timestamps",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Token with tampered timestamp",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_alg_nonE",
+        "name": "Tampered token with nonE alg",
+        "description": "Check that the API rejects tokens with nonE alg",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Tampered Token with nonE algorithm",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_alg_none",
+        "name": "Tampered token with none alg",
+        "description": "Check that the API rejects tokens with none alg",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Tampered Token with none algorithm",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_sub",
+        "name": "Account Takeover via sub swap",
+        "description": "Check that the API rejects tokens with tampered sub claim",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Account Takeover via sub tampering",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_exp",
+        "name": "Token with tampered `exp` claim",
+        "description": "Check that the API rejects tokens with tampered exp claim",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Token with tampered `exp` claim",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_token_email",
+        "name": "Token tampered with swapped emails",
+        "description": "Check that the API rejects tokens with tampered emails",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Token tampered with swapped emails",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "expired",
+        "name": "Expired token",
+        "description": "Check that the API rejects expired tokens",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Expired Token",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "jwt_conformance",
+        "name": "JWT conformance",
+        "description": "Check contains all the reserved claims in the JWT specification",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "JWT conformance",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "id_token",
+        "name": "ID token for access",
+        "description": "Check if the API uses ID tokens for access authorization",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "ID token for access",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "id_token_aws_cognito",
+        "name": "ID token from AWS Cognito used for access",
+        "description": "Check if the API uses ID tokens from AWS Cognito for access authorization",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "ID token from AWS Cognito for access",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "tampered_aws_cognito_groups",
+        "name": "Attempting privilege escalation ",
+        "description": "Check that the API rejects ID tokens with tampered cognito groups",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "ID token from AWS Cognito with tampered groups",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "token",
+        "name": "Access token",
+        "description": "Look for security issues involving access tokens."
+      },
+      "test": {
+        "id": "alg_confusion",
+        "name": "Algorithm confusion attack",
+        "description": "Check that the API is vulnerable to algorithm confusion attacks",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Algorithm confusion attack",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 1,
+        "numActiveVulnerabilities": 1,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": [
+          {
+            "detectionId": "019b938e-1ba0-778d-9655-ef1ea6c5e598",
+            "endpointId": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMvYWxs",
+            "method": "get",
+            "resource": "/workshop/api/shop/orders/all",
+            "testResult": {
+              "cvssScore": 10,
+              "cvssQualifier": "Critical",
+              "detectionDescription": null,
+              "assertion": null,
+              "remediation": null,
+              "owaspTags": [
+                "API2:2023"
+              ],
+              "cwes": null
+            },
+            "detectionDate": "2026-01-06T13:45:22.592613917",
+            "lastFoundDate": "2026-01-06T13:45:22.592614157",
+            "resolutionDate": null,
+            "status": "ACTIVE",
+            "riskAcceptedEndDate": null,
+            "riskAcceptedBy": null,
+            "comments": null
+          }
+        ]
+      }
+    },
+    {
+      "category": {
+        "id": "rbac",
+        "name": "RBAC",
+        "description": "Role Based Access Controls, testing access enforcement between Roles."
+      },
+      "test": {
+        "id": "access",
+        "name": "Role Access Check",
+        "description": "Attempt accessing each endpoint with each RBAC defined role",
+        "owaspTag": [
+          "API5:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "RBAC Access",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "mass",
+        "name": "Mass Assignment",
+        "description": "Attempt to assign values to fields that should not be allowed."
+      },
+      "test": {
+        "id": "mass_assignment_endpoint",
+        "name": "Mass Assignment",
+        "description": "Attempt to override properties that are unintended for modification.",
+        "owaspTag": [
+          "API3:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Mass Assignment",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "mass",
+        "name": "Mass Assignment",
+        "description": "Attempt to assign values to fields that should not be allowed."
+      },
+      "test": {
+        "id": "mass_assignment_flow",
+        "name": "Mass Assignment",
+        "description": "Attempt to update properties that are unintended for modification.",
+        "owaspTag": [
+          "API3:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Mass Assignment Flow",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "ddos",
+        "name": "Denial Of Service",
+        "description": "Attempt to overwhelm the service."
+      },
+      "test": {
+        "id": "load_test",
+        "name": "DDoS through load test",
+        "description": "Generate artificial traffic at a high rate in an attempt to DDoS",
+        "owaspTag": [
+          "API4:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Load Test",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "ddos",
+        "name": "Denial Of Service",
+        "description": "Attempt to overwhelm the service."
+      },
+      "test": {
+        "id": "htt2_conn_reset",
+        "name": "HTTP2 Connection Reset",
+        "description": "HTTP2 Connection Reset",
+        "owaspTag": [
+          "API4:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "HTTP/2 Connection Reset (DDoS)",
+            "enabled": false
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "ddos",
+        "name": "Denial Of Service",
+        "description": "Attempt to overwhelm the service."
+      },
+      "test": {
+        "id": "pagination",
+        "name": "Pagination Attack",
+        "description": "Pagination based attack",
+        "owaspTag": [
+          "API4:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "Page-based pagination attack",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "bola",
+        "name": "Broken Object Level Authorization",
+        "description": "Check if users can get unauthorized access to other users' data."
+      },
+      "test": {
+        "id": "bola",
+        "name": "Broken Object Level Authorization",
+        "description": "Check if users can get unauthorized access to other users' data.",
+        "owaspTag": [
+          "API1:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "BOLA",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 0,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "cve",
+        "name": "Common Vulnerabilities and Exposures",
+        "description": "Check if your application is vulnerable to Common Vulnerabilities and Exposures (CVEs)."
+      },
+      "test": {
+        "id": "cve_2017_11424",
+        "name": "PyJWT vulnerable to algorithm confusion attacks",
+        "description": "PyJWT vulnerable to algorithm confusion attacks",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "PyJWT vulnerable to algorithm confusion attacks",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "cve",
+        "name": "Common Vulnerabilities and Exposures",
+        "description": "Check if your application is vulnerable to Common Vulnerabilities and Exposures (CVEs)."
+      },
+      "test": {
+        "id": "cve_2019_7164",
+        "name": "SQLAlchemy vulnerable to injection via order_by() method",
+        "description": "SQLAlchemy vulnerable to injection via order_by() method",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "SQLAlchemy vulnerable to injection via order_by() method",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "cve",
+        "name": "Common Vulnerabilities and Exposures",
+        "description": "Check if your application is vulnerable to Common Vulnerabilities and Exposures (CVEs)."
+      },
+      "test": {
+        "id": "cve_2019_7548",
+        "name": "SQLAlchemy vulnerable to injection via group_by() method",
+        "description": "SQLAlchemy vulnerable to injection via group_by() method",
+        "owaspTag": [
+          "API8:2019"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "SQLAlchemy vulnerable to injection via group_by() method",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "cve",
+        "name": "Common Vulnerabilities and Exposures",
+        "description": "Check if your application is vulnerable to Common Vulnerabilities and Exposures (CVEs)."
+      },
+      "test": {
+        "id": "cve_2022_29217",
+        "name": "PyJWT vulnerable to algorithm confusion attacks",
+        "description": "PyJWT vulnerable to algorithm confusion attacks",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "PyJWT vulnerable to algorithm confusion attacks",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    },
+    {
+      "category": {
+        "id": "cve",
+        "name": "Common Vulnerabilities and Exposures",
+        "description": "Check if your application is vulnerable to Common Vulnerabilities and Exposures (CVEs)."
+      },
+      "test": {
+        "id": "cve_2024_24762",
+        "name": "python-multipart vulnerable to ReDoS attack",
+        "description": "python-multipart vulnerable to ReDoS attack",
+        "owaspTag": [
+          "API2:2023"
+        ],
+        "denormalizedTests": [
+          {
+            "name": "python-multipart vulnerable to ReDoS attack",
+            "enabled": true
+          }
+        ]
+      },
+      "totalDetections": 42,
+      "data": {
+        "numVulnerableEndpoints": 0,
+        "numActiveVulnerabilities": 0,
+        "numInfoDetections": 0,
+        "numResolved": 0,
+        "vulnerabilities": []
+      }
+    }
+  ]
+}

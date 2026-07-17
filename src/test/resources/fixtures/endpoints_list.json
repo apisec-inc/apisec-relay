@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "numEndpoints": 3
+  },
+  "endpointGroups": [
+    {
+      "groupId": "57c9a0be-94b5-41f4-bdf2-2a4a3eeef968",
+      "name": "Shop / Orders",
+      "endpoints": [
+        {
+          "id": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMvYWxs",
+          "path": "/workshop/api/shop/orders/all",
+          "method": "get"
+        },
+        {
+          "id": "R0VUOi93b3Jrc2hvcC9hcGkvc2hvcC9vcmRlcnMve29yZGVyX2lkfQ==",
+          "path": "/workshop/api/shop/orders/{order_id}",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "groupId": "1a2b3c4d-0000-0000-0000-000000000000",
+      "name": "Community / Posts",
+      "endpoints": [
+        {
+          "id": "R0VUOi9jb21tdW5pdHkvYXBpL3YyL2NvbW11bml0eS9wb3N0cy97cG9zdElkfQ==",
+          "path": "/community/api/v2/community/posts/{postId}",
+          "method": "get"
+        }
+      ]
+    }
+  ]
+}
