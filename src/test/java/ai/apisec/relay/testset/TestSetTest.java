@@ -53,6 +53,19 @@ final class TestSetTest {
     }
 
     @Test
+    void bodyIsEditableAndNeverNull() {
+        StagedRequest r = new StagedRequest("POST", "/orders", "", "burp");
+        assertEquals("", r.getBody());
+        r.setBody("{\"item\":42}");
+        assertEquals("{\"item\":42}", r.getBody());
+        // Editing the body must not change the dedup key.
+        assertEquals(EndpointIds.of("POST", "/orders"), r.endpointId());
+        // A null body normalizes to empty, matching the constructor contract.
+        r.setBody(null);
+        assertEquals("", r.getBody());
+    }
+
+    @Test
     void removeAndClearWork() {
         TestSet set = new TestSet();
         StagedRequest a = new StagedRequest("GET", "/a", "", "s");

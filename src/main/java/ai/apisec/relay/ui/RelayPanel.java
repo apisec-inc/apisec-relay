@@ -1,6 +1,7 @@
 package ai.apisec.relay.ui;
 
 import ai.apisec.relay.apisec.ApisecClient;
+import ai.apisec.relay.apisec.ServiceHealth;
 import ai.apisec.relay.apisec.model.ApplicationModels.AppItem;
 import ai.apisec.relay.apisec.model.ApplicationModels.InstanceItem;
 import ai.apisec.relay.apisec.model.DetectionModels.CategoryBlock;
@@ -234,7 +235,19 @@ public class RelayPanel extends JPanel {
                 } catch (java.util.concurrent.CancellationException ignored) {
                     // Cancelled on unload; nothing to update.
                 } catch (Exception ex) {
-                    fail("Failed to load findings", ex);
+                    if (ServiceHealth.isServiceUnavailable(ex)) {
+                        // The table is only replaced on success, so any previously
+                        // loaded findings stay on screen. Surface a distinct
+                        // "service unavailable" indicator and point at that cache.
+                        api.logging().logToError("Failed to load findings :: " + ex.getMessage());
+                        int cached = tableModel.getRowCount();
+                        setStatus("APIsec service unavailable. " + (cached > 0
+                                ? "Showing " + cached + " finding(s) from the last successful load. "
+                                : "No cached findings to show. ")
+                                + "Check the host, your network, or APIsec status, then Load findings again.");
+                    } else {
+                        fail("Failed to load findings", ex);
+                    }
                 } finally {
                     setButtonLoading(loadButton, false, null);
                     loadingFindings = false;
@@ -462,7 +475,12 @@ public class RelayPanel extends JPanel {
     private void fail(String prefix, Exception ex) {
         Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
         api.logging().logToError(prefix + " :: " + cause.getMessage());
-        setStatus(prefix + ": " + cause.getMessage());
+        if (ServiceHealth.isServiceUnavailable(ex)) {
+            setStatus("APIsec service unavailable: " + prefix
+                    + ". Check the host, your network, or APIsec status, then retry.");
+        } else {
+            setStatus(prefix + ": " + cause.getMessage());
+        }
     }
 
     private void setStatus(String text) {

@@ -119,6 +119,10 @@ public final class TestSet {
             return body;
         }
 
+        public void setBody(String body) {
+            this.body = body == null ? "" : body;
+        }
+
         public String getOrigin() {
             return origin;
         }

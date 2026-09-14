@@ -3,12 +3,16 @@ package ai.apisec.relay.ui;
 import ai.apisec.relay.testset.TestSet.StagedRequest;
 import burp.api.montoya.http.message.HttpRequestResponse;
 import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
 import org.junit.jupiter.api.Test;
 
+import java.awt.Component;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class TestSetContextMenuTest {
 
@@ -32,6 +36,39 @@ final class TestSetContextMenuTest {
         staged.setPath("/api/orders?id={order_id}&expand={expand_flag}");
 
         assertEquals("/api/orders?id={order_id}&expand={expand_flag}", staged.getPath());
+    }
+
+    @Test
+    void menuHiddenWhenEventIsNotFromASupportedTool() {
+        HttpRequestResponse rr = requestResponse(request("GET", "/api/orders", "", "/api/orders", ""));
+        TestSetContextMenu provider = new TestSetContextMenu(staged -> { });
+
+        List<Component> items = provider.provideMenuItems(event(false, List.of(rr)));
+
+        assertTrue(items.isEmpty());
+    }
+
+    @Test
+    void menuShownWhenEventIsFromASupportedTool() {
+        HttpRequestResponse rr = requestResponse(request("GET", "/api/orders", "", "/api/orders", ""));
+        TestSetContextMenu provider = new TestSetContextMenu(staged -> { });
+
+        List<Component> items = provider.provideMenuItems(event(true, List.of(rr)));
+
+        assertEquals(1, items.size());
+    }
+
+    private static ContextMenuEvent event(boolean fromSupportedTool, List<HttpRequestResponse> selected) {
+        return (ContextMenuEvent) Proxy.newProxyInstance(
+                ContextMenuEvent.class.getClassLoader(),
+                new Class<?>[]{ContextMenuEvent.class},
+                (proxy, method, args) -> switch (method.getName()) {
+                    case "isFromTool" -> fromSupportedTool;
+                    case "messageEditorRequestResponse" -> Optional.empty();
+                    case "selectedRequestResponses" -> selected;
+                    case "selectedIssues" -> List.of();
+                    default -> defaultValue(method.getReturnType());
+                });
     }
 
     private static HttpRequestResponse requestResponse(HttpRequest request) {

@@ -1,6 +1,7 @@
 package ai.apisec.relay.ui;
 
 import ai.apisec.relay.testset.TestSet.StagedRequest;
+import burp.api.montoya.core.ToolType;
 import burp.api.montoya.http.message.HttpRequestResponse;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.ui.contextmenu.ContextMenuEvent;
@@ -35,6 +36,13 @@ public final class TestSetContextMenu implements ContextMenuItemsProvider {
     @Override
     public List<Component> provideMenuItems(ContextMenuEvent event) {
         if (event == null) {
+            return List.of();
+        }
+        // Scope the action to the tools this extension is built to stage from:
+        // proxy history/intercept, the Target site map, Repeater, and Logger.
+        // Without this the item would also appear in unrelated contexts such as
+        // Intruder or Scanner, where staging into a test set makes no sense.
+        if (!event.isFromTool(ToolType.PROXY, ToolType.TARGET, ToolType.REPEATER, ToolType.LOGGER)) {
             return List.of();
         }
         List<HttpRequestResponse> selected = collect(event);

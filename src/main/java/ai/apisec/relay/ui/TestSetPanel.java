@@ -2,6 +2,7 @@ package ai.apisec.relay.ui;
 
 import ai.apisec.relay.apisec.ApisecClient;
 import ai.apisec.relay.apisec.ScanPoller;
+import ai.apisec.relay.apisec.ServiceHealth;
 import ai.apisec.relay.apisec.model.ApplicationModels.AppItem;
 import ai.apisec.relay.apisec.model.ApplicationModels.InstanceItem;
 import ai.apisec.relay.apisec.model.AuthModels.AuthItem;
@@ -515,9 +516,16 @@ public final class TestSetPanel extends JPanel {
                     } else if (result.finalStatus != null && result.finalStatus.isComplete()) {
                         jumpToFindingsButton.setEnabled(true);
                         setStatus("Scan Complete. scanId " + result.scanId + ". Jump to Findings when ready.");
-                    } else {
+                    } else if (result.scanId == null || result.scanId.isBlank()) {
                         setStatus("Submitted: added " + newCount + " new endpoint(s), scanning "
-                                + scanCount + ". scanId " + result.scanId + ". Polling stopped before Complete"
+                                + scanCount + ", but APIsec did not return a scanId. Check APIsec directly.");
+                    } else {
+                        // Polling window elapsed without a Complete status. Say so
+                        // explicitly instead of leaving the last-seen status (e.g.
+                        // "running") on screen, so the operator knows to check APIsec
+                        // rather than keep waiting on this panel.
+                        setStatus("Scan still in progress after about 5 minutes. Polling window elapsed for scanId "
+                                + result.scanId + "; check APIsec directly for completion"
                                 + statusReason(result.finalStatus) + ".");
                     }
                 } catch (java.util.concurrent.CancellationException ignored) {
@@ -686,6 +694,8 @@ public final class TestSetPanel extends JPanel {
         JPopupMenu menu = new JPopupMenu();
         JMenuItem editPath = new JMenuItem("Edit path");
         editPath.addActionListener(e -> onEditPathSelected());
+        JMenuItem editBody = new JMenuItem("Edit body");
+        editBody.addActionListener(e -> onEditBodySelected());
         JMenuItem templatize = new JMenuItem("Templatize selected");
         templatize.addActionListener(e -> onTemplatizeSelected());
         JMenuItem viewBody = new JMenuItem("View body");
@@ -693,6 +703,7 @@ public final class TestSetPanel extends JPanel {
         JMenuItem remove = new JMenuItem("Remove selected");
         remove.addActionListener(e -> onRemoveSelected());
         menu.add(editPath);
+        menu.add(editBody);
         menu.add(templatize);
         menu.add(viewBody);
         menu.addSeparator();
@@ -754,6 +765,39 @@ public final class TestSetPanel extends JPanel {
         tableModel.clearLabelFor(req);
         tableModel.fireTableDataChanged();
         setStatus("Edited path. Review, then Preview or Submit.");
+    }
+
+    /**
+     * Edits the body of the selected staged request in a multi-line dialog,
+     * mirroring the Edit path flow. Bodies captured from Burp (or left empty on
+     * requests relayed from the Findings tab) can be corrected or supplied here,
+     * so POST/PUT/PATCH endpoints reach APIsec with a representative payload. The
+     * body is not part of the dedup key, so no reindex is needed.
+     */
+    private void onEditBodySelected() {
+        int viewRow = table.getSelectedRow();
+        if (viewRow < 0) {
+            setStatus("Select a row to edit its body.");
+            return;
+        }
+        StagedRequest req = tableModel.rowAt(table.convertRowIndexToModel(viewRow));
+        if (req == null) {
+            return;
+        }
+        JTextArea area = new JTextArea(req.getBody() == null ? "" : req.getBody(), 20, 60);
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        HtmlSafe.harden(area);
+        int choice = JOptionPane.showConfirmDialog(dialogParent(), new JScrollPane(area),
+                req.getMethod() + " " + req.getPath() + " body",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (choice != JOptionPane.OK_OPTION) {
+            return;
+        }
+        req.setBody(area.getText());
+        persistTestSets();
+        tableModel.fireTableDataChanged();
+        setStatus("Edited body. Review, then Preview or Submit.");
     }
 
     private void onShowBody() {
@@ -917,7 +961,12 @@ public final class TestSetPanel extends JPanel {
     private void fail(String prefix, Exception ex) {
         Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
         api.logging().logToError(prefix + " :: " + cause.getMessage());
-        setStatus(prefix + ": " + cause.getMessage());
+        if (ServiceHealth.isServiceUnavailable(ex)) {
+            setStatus("APIsec service unavailable: " + prefix
+                    + ". Check the host, your network, or APIsec status, then retry.");
+        } else {
+            setStatus(prefix + ": " + cause.getMessage());
+        }
     }
 
     private void setStatus(String text) {

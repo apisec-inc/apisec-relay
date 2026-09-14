@@ -15,6 +15,7 @@ import ai.apisec.relay.apisec.model.ScanModels.ScanInitResponse;
 import ai.apisec.relay.apisec.model.ScanModels.ScanRequest;
 import ai.apisec.relay.apisec.model.ScanModels.ScanStatus;
 import burp.api.montoya.http.Http;
+import burp.api.montoya.http.RequestOptions;
 import burp.api.montoya.http.message.HttpRequestResponse;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.logging.Logging;
@@ -276,7 +277,13 @@ public class ApisecClient {
         if (burpHttp == null) {
             throw new IOException("Burp HTTP API is unavailable. Reload APIsec Relay in Burp.");
         }
-        HttpRequestResponse response = burpHttp.sendRequest(request);
+        // Enforce upstream TLS verification for control-plane calls. Burp does
+        // not validate upstream certificates by default (it behaves like an
+        // intercepting proxy), so a plain sendRequest would silently accept a
+        // forged certificate on the APIsec connection. withUpstreamTLSVerification()
+        // opts these outbound API requests back into certificate validation.
+        HttpRequestResponse response = burpHttp.sendRequest(
+                request, RequestOptions.requestOptions().withUpstreamTLSVerification());
         if (response == null || !response.hasResponse()) {
             throw new IOException("APIsec request returned no HTTP response");
         }

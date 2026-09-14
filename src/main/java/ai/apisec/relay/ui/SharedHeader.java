@@ -1,6 +1,7 @@
 package ai.apisec.relay.ui;
 
 import ai.apisec.relay.apisec.ApisecClient;
+import ai.apisec.relay.apisec.ServiceHealth;
 import ai.apisec.relay.apisec.model.ApplicationModels.AppDetail;
 import ai.apisec.relay.apisec.model.ApplicationModels.AppItem;
 import ai.apisec.relay.apisec.model.ApplicationModels.InstanceItem;
@@ -359,7 +360,14 @@ public final class SharedHeader extends JPanel {
     private void fail(String prefix, Exception ex) {
         Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
         api.logging().logToError(prefix + " :: " + cause.getMessage());
-        setStatus(prefix + ": " + cause.getMessage());
+        if (ServiceHealth.isServiceUnavailable(ex)) {
+            // The combo boxes keep their last-loaded contents on failure, so the
+            // operator can still work from cached applications/instances.
+            setStatus("APIsec service unavailable: " + prefix
+                    + ". Showing the last loaded selection. Check host/network/APIsec status, then Refresh.");
+        } else {
+            setStatus(prefix + ": " + cause.getMessage());
+        }
     }
 
     private void saveCurrentSelection() {
