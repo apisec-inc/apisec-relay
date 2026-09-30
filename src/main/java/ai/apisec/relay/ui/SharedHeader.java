@@ -44,11 +44,16 @@ public final class SharedHeader extends JPanel {
 
     private boolean populating = false;
     private boolean busy = false;
+    // Bumped whenever the host or PAT the client uses changes, so data loaded
+    // under an earlier configuration can be recognized as stale.
+    private volatile long configGeneration = 0;
 
     // Listeners notified when the selected instance changes (incl. cleared).
     private final List<Runnable> instanceListeners = new ArrayList<>();
     // Listeners notified when busy state flips, so tabs can disable their controls.
     private final List<Consumer<Boolean>> busyListeners = new ArrayList<>();
+    // Listeners notified when the host or PAT changes (incl. PAT cleared).
+    private final List<Runnable> configListeners = new ArrayList<>();
 
     public SharedHeader(MontoyaApi api, RelayConfig config, ApisecClient client) {
         this(api, config, client, null, new BackgroundTasks());
@@ -197,6 +202,20 @@ public final class SharedHeader extends JPanel {
         return busy;
     }
 
+    /** The APIsec host the client is configured for. Never includes the PAT. */
+    public String configuredHost() {
+        return config.host();
+    }
+
+    /** Changes whenever the host or PAT changes; safe to read off the EDT. */
+    public long configGeneration() {
+        return configGeneration;
+    }
+
+    public void addConfigChangeListener(Runnable r) {
+        configListeners.add(r);
+    }
+
     public void setStatus(String text) {
         if (SwingUtilities.isEventDispatchThread()) {
             status.setText(text);
@@ -238,6 +257,8 @@ public final class SharedHeader extends JPanel {
      * surfaces in the status line and aborts the caller.
      */
     private boolean saveConfig() {
+        String previousHost = config.host();
+        String previousPat = config.pat();
         try {
             config.save(hostField.getText(), new String(patField.getPassword()));
         } catch (IllegalArgumentException ex) {
@@ -245,15 +266,30 @@ public final class SharedHeader extends JPanel {
             return false;
         }
         hostField.setText(config.host());
+        boolean changed = !previousHost.equals(config.host()) || !previousPat.equals(config.pat());
+        if (changed) {
+            configGeneration++;
+        }
         client.configure(config.host(), config.pat());
+        if (changed) {
+            fireConfigChanged();
+        }
         return true;
     }
 
     private void onClearPat() {
         config.clearPat();
         patField.setText("");
+        configGeneration++;
         client.configure(config.host(), "");
+        fireConfigChanged();
         setStatus("PAT cleared.");
+    }
+
+    private void fireConfigChanged() {
+        for (Runnable r : configListeners) {
+            r.run();
+        }
     }
 
     // ---- loading ----
