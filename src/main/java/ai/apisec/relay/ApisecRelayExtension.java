@@ -11,6 +11,7 @@ import ai.apisec.relay.ui.TestSetContextMenu;
 import ai.apisec.relay.ui.TestSetPanel;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.core.BurpSuiteEdition;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -39,6 +40,15 @@ public class ApisecRelayExtension implements BurpExtension {
     @Override
     public void initialize(MontoyaApi api) {
         api.extension().setName("APIsec Relay");
+
+        // The extension is built around a Swing suite tab, a context menu, and
+        // Repeater, none of which exist in headless Burp Suite DAST. It targets
+        // Professional and Community only; stay inert if loaded elsewhere.
+        if (api.burpSuite().version().edition() == BurpSuiteEdition.ENTERPRISE_EDITION) {
+            api.logging().logToOutput("APIsec Relay requires Burp Suite Professional or Community "
+                    + "(Swing UI and Repeater). Not loading in Burp Suite DAST.");
+            return;
+        }
 
         RelayConfig config = new RelayConfig(api.persistence().preferences());
         RelayProjectState state = new RelayProjectState(

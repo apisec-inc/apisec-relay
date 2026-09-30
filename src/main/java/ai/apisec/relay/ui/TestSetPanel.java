@@ -20,6 +20,7 @@ import burp.api.montoya.MontoyaApi;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -502,9 +503,20 @@ public final class TestSetPanel extends JPanel {
                     return SubmitResult.submitted(scanId, null);
                 }
                 setStatus("Submitted. scanId " + scanId + ". Polling GET scans/{scanId} until Complete...");
-                ScanStatus finalStatus = scanPoller.pollUntilComplete(
-                        () -> client.getScan(appId, instId, scanId));
-                return SubmitResult.submitted(scanId, finalStatus);
+                try {
+                    ScanStatus finalStatus = scanPoller.pollUntilComplete(
+                            () -> client.getScan(appId, instId, scanId));
+                    return SubmitResult.submitted(scanId, finalStatus);
+                } catch (IOException pollEx) {
+                    // The endpoints were added and the scan started; only status
+                    // polling failed. Report that instead of "Submit failed", which
+                    // would drop the scanId and invite a duplicate submission.
+                    if (api != null) {
+                        api.logging().logToError("Scan status polling failed for scanId "
+                                + scanId + " :: " + pollEx.getMessage());
+                    }
+                    return SubmitResult.pollFailed(scanId, pollEx);
+                }
             }
 
             @Override
@@ -516,9 +528,15 @@ public final class TestSetPanel extends JPanel {
                     } else if (result.finalStatus != null && result.finalStatus.isComplete()) {
                         jumpToFindingsButton.setEnabled(true);
                         setStatus("Scan Complete. scanId " + result.scanId + ". Jump to Findings when ready.");
-                    } else if (result.scanId == null || result.scanId.isBlank()) {
+                    } else if (!result.hasScanId()) {
                         setStatus("Submitted: added " + newCount + " new endpoint(s), scanning "
                                 + scanCount + ", but APIsec did not return a scanId. Check APIsec directly.");
+                    } else if (result.pollError != null) {
+                        setStatus("Scan started (scanId " + result.scanId + ") but status polling "
+                                + (ServiceHealth.isServiceUnavailable(result.pollError)
+                                        ? "lost contact with APIsec"
+                                        : "failed: " + result.pollError.getMessage())
+                                + ". Do not resubmit; check APIsec directly for completion.");
                     } else {
                         // Polling window elapsed without a Complete status. Say so
                         // explicitly instead of leaving the last-seen status (e.g.
@@ -963,7 +981,7 @@ public final class TestSetPanel extends JPanel {
         api.logging().logToError(prefix + " :: " + cause.getMessage());
         if (ServiceHealth.isServiceUnavailable(ex)) {
             setStatus("APIsec service unavailable: " + prefix
-                    + ". Check the host, your network, or APIsec status, then retry.");
+                    + ". Check the host, your network, TLS certificate, or APIsec status, then retry.");
         } else {
             setStatus(prefix + ": " + cause.getMessage());
         }
@@ -987,23 +1005,35 @@ public final class TestSetPanel extends JPanel {
         return " with status " + state + reason;
     }
 
-    private static final class SubmitResult {
+    static final class SubmitResult {
         final boolean cancelled;
+        /** Raw scanId from APIsec; null or blank when none was returned. */
         final String scanId;
         final ScanStatus finalStatus;
+        /** Set when the scan started but polling its status threw. */
+        final IOException pollError;
 
-        private SubmitResult(boolean cancelled, String scanId, ScanStatus finalStatus) {
+        private SubmitResult(boolean cancelled, String scanId, ScanStatus finalStatus, IOException pollError) {
             this.cancelled = cancelled;
-            this.scanId = scanId == null || scanId.isBlank() ? "(none)" : scanId;
+            this.scanId = scanId;
             this.finalStatus = finalStatus;
+            this.pollError = pollError;
+        }
+
+        boolean hasScanId() {
+            return scanId != null && !scanId.isBlank();
         }
 
         static SubmitResult cancelled() {
-            return new SubmitResult(true, null, null);
+            return new SubmitResult(true, null, null, null);
         }
 
         static SubmitResult submitted(String scanId, ScanStatus finalStatus) {
-            return new SubmitResult(false, scanId, finalStatus);
+            return new SubmitResult(false, scanId, finalStatus, null);
+        }
+
+        static SubmitResult pollFailed(String scanId, IOException pollError) {
+            return new SubmitResult(false, scanId, null, pollError);
         }
     }
 

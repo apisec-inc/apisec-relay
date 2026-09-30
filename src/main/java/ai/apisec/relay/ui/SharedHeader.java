@@ -148,6 +148,13 @@ public final class SharedHeader extends JPanel {
             AppItem app = (AppItem) appCombo.getSelectedItem();
             if (app != null) {
                 saveTargetSelection(app.applicationId, null);
+                // Drop the previous application's instances before loading, so a
+                // failed load (e.g. APIsec unreachable) cannot leave this app paired
+                // with another app's instance.
+                populating = true;
+                instanceCombo.removeAllItems();
+                populating = false;
+                fireInstanceChanged();
                 loadInstances(app);
             }
         });
@@ -289,7 +296,7 @@ public final class SharedHeader extends JPanel {
                     populating = false;
                 } catch (Exception ex) {
                     populating = false;
-                    fail("Failed to load applications", ex);
+                    fail("Failed to load applications", ex, " Keeping the last loaded applications.");
                 } finally {
                     setButtonLoading(refreshButton, false, null);
                     setBusy(false);
@@ -349,7 +356,7 @@ public final class SharedHeader extends JPanel {
                     populating = false;
                 } catch (Exception ex) {
                     populating = false;
-                    fail("Failed to load instances", ex);
+                    fail("Failed to load instances", ex, "");
                 } finally {
                     setBusy(false);
                 }
@@ -357,14 +364,14 @@ public final class SharedHeader extends JPanel {
         });
     }
 
-    private void fail(String prefix, Exception ex) {
+    private void fail(String prefix, Exception ex, String cacheNote) {
         Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
         api.logging().logToError(prefix + " :: " + cause.getMessage());
         if (ServiceHealth.isServiceUnavailable(ex)) {
-            // The combo boxes keep their last-loaded contents on failure, so the
-            // operator can still work from cached applications/instances.
-            setStatus("APIsec service unavailable: " + prefix
-                    + ". Showing the last loaded selection. Check host/network/APIsec status, then Refresh.");
+            // The application list is only replaced on success, so on failure the
+            // operator can still work from the last loaded applications.
+            setStatus("APIsec service unavailable: " + prefix + "." + cacheNote
+                    + " Check host, network, TLS certificate, or APIsec status, then Refresh.");
         } else {
             setStatus(prefix + ": " + cause.getMessage());
         }

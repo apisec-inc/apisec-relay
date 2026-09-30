@@ -55,6 +55,8 @@ public class RelayPanel extends JPanel {
             "Critical", "High", "Medium", "Low", "Informational");
 
     private boolean loadingFindings = false;
+    /** "App / Instance" the findings table was last loaded for; null before the first load. */
+    private String loadedTargetLabel;
     private boolean sendingToRepeater = false;
     private boolean updatingSeverityFilter = false;
     private java.util.function.Consumer<List<StagedRequest>> stageEndpointAction;
@@ -231,6 +233,7 @@ public class RelayPanel extends JPanel {
                     sorter.setSortKeys(List.of(
                             new RowSorter.SortKey(FindingsTableModel.COL_SEVERITY, SortOrder.DESCENDING)));
                     applyFilter();
+                    loadedTargetLabel = app + " / " + inst;
                     setStatus("Loaded " + rows.size() + " findings.");
                 } catch (java.util.concurrent.CancellationException ignored) {
                     // Cancelled on unload; nothing to update.
@@ -242,9 +245,10 @@ public class RelayPanel extends JPanel {
                         api.logging().logToError("Failed to load findings :: " + ex.getMessage());
                         int cached = tableModel.getRowCount();
                         setStatus("APIsec service unavailable. " + (cached > 0
-                                ? "Showing " + cached + " finding(s) from the last successful load. "
+                                ? "Showing " + cached + " finding(s) from the last successful load ("
+                                        + loadedTargetLabel + "). "
                                 : "No cached findings to show. ")
-                                + "Check the host, your network, or APIsec status, then Load findings again.");
+                                + "Check the host, your network, TLS certificate, or APIsec status, then Load findings again.");
                     } else {
                         fail("Failed to load findings", ex);
                     }
@@ -477,7 +481,7 @@ public class RelayPanel extends JPanel {
         api.logging().logToError(prefix + " :: " + cause.getMessage());
         if (ServiceHealth.isServiceUnavailable(ex)) {
             setStatus("APIsec service unavailable: " + prefix
-                    + ". Check the host, your network, or APIsec status, then retry.");
+                    + ". Check the host, your network, TLS certificate, or APIsec status, then retry.");
         } else {
             setStatus(prefix + ": " + cause.getMessage());
         }
