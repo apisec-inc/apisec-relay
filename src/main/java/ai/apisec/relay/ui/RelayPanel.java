@@ -43,11 +43,13 @@ public class RelayPanel extends JPanel {
     private final TableRowSorter<FindingsTableModel> sorter = new TableRowSorter<>(tableModel);
     private final JLabel status = new JLabel("Select an application and instance above, then Load findings.");
     private final JLabel countLabel = new JLabel("0 findings");
+    private final JLabel sourceLabel = new JLabel(" ");
     private final JTextField filterField = new JTextField(20);
     private final JComboBox<String> statusFilter = new JComboBox<>();
     private final JButton loadButton = new JButton("Load findings");
     private final JComboBox<SeverityOption> severityFilter = new JComboBox<>(severityFilterOptions());
     private final JButton sendButton = new JButton("Send to Repeater");
+    private final JMenuItem sendMenuItem = new JMenuItem("Send to Repeater");
     private final JCheckBox includeUnauthBox = new JCheckBox("Also send unauthenticated request", true);
 
     private static final String LOAD_ALL_FINDINGS = "Load All Findings";
@@ -55,8 +57,12 @@ public class RelayPanel extends JPanel {
             "Critical", "High", "Medium", "Low", "Informational");
 
     private boolean loadingFindings = false;
-    /** "App / Instance" the findings table was last loaded for; null before the first load. */
-    private String loadedTargetLabel;
+    /**
+     * Host, application, instance and config generation the table's rows were
+     * loaded from; null while the table is empty. Replay only runs against this
+     * source, and only while the header still selects it.
+     */
+    private FindingsSource loadedSource;
     private boolean sendingToRepeater = false;
     private boolean updatingSeverityFilter = false;
     private java.util.function.Consumer<List<StagedRequest>> stageEndpointAction;
@@ -91,6 +97,7 @@ public class RelayPanel extends JPanel {
         HtmlSafe.hardenTable(table);
         HtmlSafe.harden(status);
         HtmlSafe.harden(countLabel);
+        HtmlSafe.harden(sourceLabel);
 
         // A2: Severity cell shows "Qualifier (score)" while the model sorts by score.
         DefaultTableCellRenderer severityRenderer = new DefaultTableCellRenderer() {
@@ -109,6 +116,8 @@ public class RelayPanel extends JPanel {
                 .setCellRenderer(severityRenderer);
 
         header.addBusyListener(b -> updateActionState());
+        header.addInstanceChangeListener(this::onTargetChanged);
+        header.addConfigChangeListener(this::onConfigChanged);
         installFindingsPopup();
         updateActionState();
     }
@@ -122,10 +131,9 @@ public class RelayPanel extends JPanel {
         JPopupMenu menu = new JPopupMenu();
         JMenuItem addToSet = new JMenuItem("Add to test set");
         addToSet.addActionListener(e -> onAddToTestSet());
-        JMenuItem send = new JMenuItem("Send to Repeater");
-        send.addActionListener(e -> onSendToRepeater());
+        sendMenuItem.addActionListener(e -> onSendToRepeater());
         menu.add(addToSet);
-        menu.add(send);
+        menu.add(sendMenuItem);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mousePressed(java.awt.event.MouseEvent e) { maybePopup(e); }
             @Override public void mouseReleased(java.awt.event.MouseEvent e) { maybePopup(e); }
@@ -191,6 +199,7 @@ public class RelayPanel extends JPanel {
         statusFilter.addActionListener(e -> applyFilter());
         p.add(statusFilter);
         p.add(countLabel);
+        p.add(sourceLabel);
         return p;
     }
 
@@ -206,9 +215,8 @@ public class RelayPanel extends JPanel {
     }
 
     private void onLoadFindings() {
-        AppItem app = header.selectedApp();
-        InstanceItem inst = header.selectedInstance();
-        if (app == null || inst == null) {
+        FindingsSource requested = currentSource();
+        if (requested == null) {
             setStatus("Pick an application and instance in the header first.");
             return;
         }
@@ -219,7 +227,8 @@ public class RelayPanel extends JPanel {
         tasks.execute(new SwingWorker<List<FindingRow>, Void>() {
             @Override
             protected List<FindingRow> doInBackground() throws Exception {
-                DetectionsResponse resp = client.listDetections(app.applicationId, inst.instanceId);
+                DetectionsResponse resp = client.listDetections(
+                        requested.applicationId, requested.instanceId);
                 return flatten(resp);
             }
 
@@ -227,14 +236,17 @@ public class RelayPanel extends JPanel {
             protected void done() {
                 try {
                     List<FindingRow> rows = get();
-                    tableModel.setRows(rows);
-                    rebuildStatusFilter(rows);
-                    // A2: default sort by severity, highest first.
-                    sorter.setSortKeys(List.of(
-                            new RowSorter.SortKey(FindingsTableModel.COL_SEVERITY, SortOrder.DESCENDING)));
-                    applyFilter();
-                    loadedTargetLabel = app + " / " + inst;
-                    setStatus("Loaded " + rows.size() + " findings.");
+                    if (!requested.equals(currentSource())) {
+                        // The header target, host or PAT changed while this load
+                        // was in flight. Never show these rows under the new
+                        // selection, where they would become replayable.
+                        setStatus("Discarded findings loaded for " + requested.label
+                                + " because the target, host, or PAT changed while loading. "
+                                + "Load findings again.");
+                        return;
+                    }
+                    showFindings(rows, requested);
+                    setStatus("Loaded " + rows.size() + " findings from " + requested.label + ".");
                 } catch (java.util.concurrent.CancellationException ignored) {
                     // Cancelled on unload; nothing to update.
                 } catch (Exception ex) {
@@ -244,9 +256,11 @@ public class RelayPanel extends JPanel {
                         // "service unavailable" indicator and point at that cache.
                         api.logging().logToError("Failed to load findings :: " + ex.getMessage());
                         int cached = tableModel.getRowCount();
+                        String blocked = loadedSource == null ? null : replayBlockReason();
                         setStatus("APIsec service unavailable. " + (cached > 0
-                                ? "Showing " + cached + " finding(s) from the last successful load ("
-                                        + loadedTargetLabel + "). "
+                                ? "Showing " + cached + " cached finding(s) from " + loadedSource.label + ". "
+                                        + (blocked == null ? "" : "Send to Repeater is disabled until the header "
+                                                + "selects that target again. ")
                                 : "No cached findings to show. ")
                                 + "Check the host, your network, TLS certificate, or APIsec status, then Load findings again.");
                     } else {
@@ -274,12 +288,19 @@ public class RelayPanel extends JPanel {
                 rows.add(row);
             }
         }
-        AppItem app = header.selectedApp();
-        InstanceItem inst = header.selectedInstance();
-        if (app == null || inst == null || rows.isEmpty()) {
+        if (rows.isEmpty()) {
             setStatus("Missing application, instance, or finding.");
             return;
         }
+        // Enforced here as well as on the button and menu item: a detection ID
+        // is only meaningful for the host/application/instance it came from.
+        String blocked = replayBlockReason();
+        if (blocked != null) {
+            setStatus(blocked);
+            updateActionState();
+            return;
+        }
+        FindingsSource source = loadedSource;
         setStatus("Fetching proof of concept...");
         sendingToRepeater = true;
         setButtonLoading(sendButton, true, "Sending...");
@@ -289,8 +310,12 @@ public class RelayPanel extends JPanel {
             protected Integer doInBackground() throws Exception {
                 int sent = 0;
                 for (FindingRow row : rows) {
+                    if (header.configGeneration() != source.configGeneration) {
+                        throw new IllegalStateException("APIsec host or PAT changed while sending; stopped after "
+                                + sent + " request(s). Load findings again.");
+                    }
                     DetectionDetail detail = client.getDetection(
-                            app.applicationId, inst.instanceId, row.detectionId);
+                            source.applicationId, source.instanceId, row.detectionId);
                     sent += dispatcher.sendChain(detail, includeUnauthBox.isSelected());
                 }
                 return sent;
@@ -415,12 +440,78 @@ public class RelayPanel extends JPanel {
         countLabel.setText(shown == total ? total + " findings" : shown + " of " + total + " findings");
     }
 
+    private void showFindings(List<FindingRow> rows, FindingsSource source) {
+        loadedSource = rows.isEmpty() ? null : source;
+        tableModel.setRows(rows);
+        rebuildStatusFilter(rows);
+        // A2: default sort by severity, highest first.
+        sorter.setSortKeys(List.of(
+                new RowSorter.SortKey(FindingsTableModel.COL_SEVERITY, SortOrder.DESCENDING)));
+        applyFilter();
+        updateActionState();
+    }
+
+    private void onTargetChanged() {
+        updateActionState();
+        if (loadedSource == null) {
+            return;
+        }
+        String blocked = replayBlockReason();
+        setStatus(blocked != null ? blocked
+                : "Header matches the loaded findings (" + loadedSource.label + "). Send to Repeater is available.");
+    }
+
+    private void onConfigChanged() {
+        boolean hadFindings = loadedSource != null || tableModel.getRowCount() > 0;
+        showFindings(new ArrayList<>(), null);
+        if (hadFindings) {
+            setStatus("APIsec host or PAT changed. Cleared cached findings; Load findings again.");
+        }
+    }
+
+    /** The header's current host/application/instance, or null if incomplete. */
+    private FindingsSource currentSource() {
+        AppItem app = header.selectedApp();
+        InstanceItem inst = header.selectedInstance();
+        if (app == null || inst == null || app.applicationId == null || inst.instanceId == null) {
+            return null;
+        }
+        String host = header.configuredHost();
+        return new FindingsSource(host, app.applicationId, inst.instanceId, header.configGeneration(),
+                host + " | " + app + " / " + inst);
+    }
+
+    /** Why replay is not allowed right now, or null when it is. */
+    private String replayBlockReason() {
+        if (loadedSource == null) {
+            return "Load findings for the selected application and instance first.";
+        }
+        FindingsSource current = currentSource();
+        if (current == null) {
+            return "Send to Repeater is disabled: select " + loadedSource.label
+                    + " in the header to replay these findings, or Load findings for a new target.";
+        }
+        if (!loadedSource.equals(current)) {
+            return "Send to Repeater is disabled: these findings were loaded from " + loadedSource.label
+                    + ", but the header selects " + current.label
+                    + ". Switch back, or Load findings for the new target.";
+        }
+        return null;
+    }
+
     private void updateActionState() {
         Runnable update = () -> {
             boolean headerBusy = header.isBusy();
-            loadButton.setEnabled(!headerBusy && !loadingFindings && !sendingToRepeater);
-            severityFilter.setEnabled(!headerBusy && !loadingFindings && !sendingToRepeater);
-            sendButton.setEnabled(!headerBusy && !loadingFindings && !sendingToRepeater);
+            boolean idle = !headerBusy && !loadingFindings && !sendingToRepeater;
+            String blocked = replayBlockReason();
+            loadButton.setEnabled(idle);
+            severityFilter.setEnabled(idle);
+            sendButton.setEnabled(idle && blocked == null);
+            sendMenuItem.setEnabled(idle && blocked == null);
+            sendButton.setToolTipText(blocked);
+            sendMenuItem.setToolTipText(blocked);
+            sourceLabel.setText(loadedSource == null ? " "
+                    : "Source: " + loadedSource.label + (blocked == null ? "" : " (not the selected target)"));
         };
         if (SwingUtilities.isEventDispatchThread()) {
             update.run();
@@ -497,6 +588,41 @@ public class RelayPanel extends JPanel {
 
     private static String nullSafe(String s) {
         return s == null ? "" : s;
+    }
+
+    /** Where a set of findings came from. The PAT itself is never held here. */
+    static final class FindingsSource {
+        final String host;
+        final String applicationId;
+        final String instanceId;
+        final long configGeneration;
+        final String label;
+
+        FindingsSource(String host, String applicationId, String instanceId, long configGeneration,
+                       String label) {
+            this.host = host;
+            this.applicationId = applicationId;
+            this.instanceId = instanceId;
+            this.configGeneration = configGeneration;
+            this.label = label;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof FindingsSource)) {
+                return false;
+            }
+            FindingsSource other = (FindingsSource) o;
+            return configGeneration == other.configGeneration
+                    && java.util.Objects.equals(host, other.host)
+                    && java.util.Objects.equals(applicationId, other.applicationId)
+                    && java.util.Objects.equals(instanceId, other.instanceId);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(host, applicationId, instanceId, configGeneration);
+        }
     }
 
     // Row backing the findings table.
